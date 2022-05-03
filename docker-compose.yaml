@@ -1,0 +1,16 @@
+services:
+  cassandra:
+    build: ./cassandra
+    container_name: "cassandra_node1"
+
+  api_backend:
+    build: ./api_backend
+    container_name: "api_backend"
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./api_backend/backend:/app/backend"
+    depends_on:
+      - cassandra
+
+
