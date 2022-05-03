@@ -10,7 +10,7 @@ HWs for Big Data course UCU
 sh run-cluster.sh
 ```
 
-3. Populate tables with data
+3. Populate tables with data (Might need to wait until cassandra init before running)
 ```bash
 sh populate-tables-with-data.sh
 ```
