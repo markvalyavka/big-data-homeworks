@@ -24,8 +24,8 @@ SELECT * FROM reviews_by_customer_id WHERE customer_id = *value*
 // які також залишили відгук для продукту product_id (N та product_id повинне задаватися в 
 // запиті)
 
-SELECT customer_id FROM reviews_by_product_id 
-WHERE product_id = *value* GROUP BY customer_id HAVING count(*) > *N_value*
+SELECT customer_i, review_count FROM reviews_by_product_id_w_customer_review_count 
+WHERE product_id = *value* AND review_count > *N_value*
 
 
 // Query 5

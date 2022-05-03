@@ -19,9 +19,10 @@ Query 3
 
 Query 4
 -------
-Це query оптимальне, бо product_id - це partition key, а customer_id - clustering key, відповідно його можна юзати у GROUP_BY.
-Єдине що був не впевнений -- чи має значення порядок колонок у clustering key? По-ідеї, оскільки customer_id стоїть на 3 місці в PRIMARY_KEY,
-а не на 2, це мало б трохи вплинути на ефектівність виконання (в гіршу сторону)?
+Тут найкраще буде зберігати review_count для кожного customer_id (в окремій колонці), і апдейтити його кожного разу коли певний customer_id
+пише відгук. Cassandra не дозволяє HAVING після GROUP BY + не дасть відсортувати по count(*).
+Це query оптимальне, бо product_id - це partition key, а review_count - clustering key, для якого відповідно будуть ефективні
+операції з нерівностями
 
 
 Query 5
