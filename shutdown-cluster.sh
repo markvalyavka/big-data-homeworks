@@ -1,3 +1,7 @@
+#!/bin/sh
 
-echo "Stopping cassandra-node and backend-api"
+echo "Stopping kafka and zookeeper."
 docker-compose -f ./docker-compose.yaml down
+
+echo "Removing kafka network."
+docker network remove kafka-network
