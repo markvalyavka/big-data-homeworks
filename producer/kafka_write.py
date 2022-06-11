@@ -24,6 +24,8 @@ def produce_from_file(filename):
         csv_reader = csv.reader(f, delimiter=',')
         for row in csv_reader:
 
+            # artificial sending delay
+            time.sleep(0.2)
             # replace date with datetime.now()
             row[3] = datetime.datetime.now().isoformat()
             producer.send(TOPIC_NAME, row)
@@ -34,6 +36,5 @@ def produce_from_file(filename):
 if __name__ == "__main__":
     print("Producing tweets in 10 seconds..")
     time.sleep(10)
-    print("Producing tweets in 5 seconds..")
-    time.sleep(10)
+
     produce_from_file("res/tweets.csv")
