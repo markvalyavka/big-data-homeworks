@@ -35,8 +35,7 @@ def produce_from_file(filename):
         csv_reader = DictReader(f, delimiter=',')
         for row in csv_reader:
             # artificial sending delay
-            time.sleep(0.2)
-            time.sleep(1)
+            time.sleep(0.02)
             # replace date with datetime.now()
             upd_row = {
                 **row,
