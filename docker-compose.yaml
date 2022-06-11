@@ -1,70 +1,33 @@
-version: "3.9"
-
+version: '2'
 
 services:
-  kafka_node:
-    image: bitnami/kafka:latest
-    container_name: kafka_node
-    restart: always
-    ports:
-      - "9092:9092"
+  spark:
+    image: docker.io/bitnami/spark:3
+    networks:
+      - spark-network
     environment:
-      KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper-server:2181
-      ALLOW_PLAINTEXT_LISTENER: "yes"
-
-    depends_on:
-      - zookeeper_server
-    networks:
-      - "kafka-network"
-
-  zookeeper_server:
-    image: bitnami/zookeeper:latest
-    container_name: zookeeper-server
-    restart: always
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
     ports:
-      - "2181:2181"
+      - '8080:8080'
+  spark-worker:
+    image: docker.io/bitnami/spark:3
+    networks:
+      - spark-network
     environment:
-       ZOOKEEPER_CLIENT_PORT: 2181
-       ALLOW_ANONYMOUS_LOGIN: "yes"
-    networks:
-      - "kafka-network"
-
-  producer_app:
-    build: producer/
-    container_name: producer_app
-    environment:
-      - PYTHONUNBUFFERED=1
-    networks:
-      - "kafka-network"
-
-  consumer_app:
-    build: consumer/
-    container_name: consumer_app
-    environment:
-      - PYTHONUNBUFFERED=1
-    networks:
-      - "kafka-network"
-
-  cassandra:
-    build: ./cassandra
-    container_name: "cassandra_node1"
-    ports:
-      - "9042:9042"
-    networks:
-      - "kafka-network"
-
-  app_rest_api:
-    build: ./app_rest_api
-    container_name: "app_rest_api"
-    ports:
-      - "8080:8080"
-    volumes:
-      - "./app_rest_api/:/app/"
-    networks:
-      - "kafka-network"
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark:7077
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_WORKER_CORES=1
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
 
 
 networks:
-  kafka-network:
-    external: true
-
+  spark-network:
+    name: spark-network
