@@ -52,5 +52,5 @@ CREATE TABLE IF NOT EXISTS hw8_valyavka.user_transactions_by_date
     newbalanceDest float,
     isFraud int,
     transactionDate date,
-    PRIMARY KEY ((nameOrig), transactionDate))
+    PRIMARY KEY ((nameDest), transactionDate))
 WITH CLUSTERING ORDER BY (transactionDate DESC);

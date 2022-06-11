@@ -27,9 +27,42 @@ def get_fraud_user_tx():
     if not user_uid:
         return "BAD REQUEST", 400
 
-    products_ = helpers.get_fraud_user_tx(user_uid)
+    fraud_users = helpers.get_fraud_user_tx(user_uid)
+    print(fraud_users, flush=True)
     return json.dumps({
-        "result": products_
+        "result": fraud_users
+    }), 200
+
+
+@app.route("/users_top_tx", methods=["GET"])
+def get_user_top_tx():
+
+    request_params = request.get_json()
+    user_uid = request_params.get("uid")
+    if not user_uid:
+        return "BAD REQUEST", 400
+
+    top_tx = helpers.get_top_user_w_tx_amount(user_uid)
+    print(top_tx, flush=True)
+    return json.dumps({
+        "result": top_tx
+    }), 200
+
+
+@app.route("/user_incoming_tx_sum", methods=["GET"])
+def get_user_incoming_tx_sum():
+
+    request_params = request.get_json()
+    user_uid = request_params.get("uid")
+    date_from = request_params.get("date_from")
+    date_to = request_params.get("date_to")
+    if not (user_uid and date_from and date_to):
+        return "BAD REQUEST", 400
+
+    tx_sum = helpers.get_incoming_tx_sum_for_user(user_uid, date_from, date_to)
+    print(tx_sum, flush=True)
+    return json.dumps({
+        "result": tx_sum
     }), 200
 
 
