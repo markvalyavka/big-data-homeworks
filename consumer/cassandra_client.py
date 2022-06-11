@@ -18,9 +18,21 @@ from cassandra.cluster import NoHostAvailable
 # );
 
 INSERT_USER_BY_IS_FRAUD_STMT = """
-INSERT INTO user_fraud (step, type, amount, nameOrig, oldbalanceOrg, newbalanceOrig, nameDest, oldbalanceDest,
+INSERT INTO user_by_is_fraud (step, type, amount, nameOrig, oldbalanceOrg, newbalanceOrig, nameDest, oldbalanceDest,
 newbalanceDest, isFraud, transactionDate)
-VALUES ({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})
+VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+"""
+
+INSERT_USER_BY_AMOUNT_STMT  = """
+INSERT INTO user_by_amount (step, type, amount, nameOrig, oldbalanceOrg, newbalanceOrig, nameDest, oldbalanceDest,
+newbalanceDest, isFraud, transactionDate)
+VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+"""
+
+INSERT_USER_TRANSACTION_BY_DATE_STMT  = """
+INSERT INTO user_transactions_by_date (step, type, amount, nameOrig, oldbalanceOrg, newbalanceOrig, nameDest, oldbalanceDest,
+newbalanceDest, isFraud, transactionDate)
+VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
 """
 
 
@@ -54,24 +66,45 @@ class CassandraClient:
 
 
     def insert_into_user_by_is_fraud(self, row):
-        from pprint import pprint
-        #pprint(list(row))
-        # INSERT INTO user_fraud (step, type, amount, nameOrig, oldbalanceOrg, newbalanceOrig, nameDest, oldbalanceDest,
-        # newbalanceDest, isFraud, transactionDate)
-        #
-
         try:
-            lst = [
+            vals = [
                 int(row.value['step']), row.value['type'], float(row.value['amount']),
                 row.value['nameOrig'], float(row.value['oldbalanceOrg']),
                 float(row.value['newbalanceOrig']), row.value['nameDest'],
                 float(row.value['oldbalanceDest']), float(row.value['newbalanceDest']),
                 int(row.value['isFraud']), row.value['transactionDate'],
             ]
+            self._session.execute(INSERT_USER_BY_IS_FRAUD_STMT, vals)
+        except Exception as e:
+            raise e
+            return
 
-            pprint(lst)
-            self._session.execute(INSERT_USER_BY_IS_FRAUD_STMT.format(*lst))
-        except Exception:
+    def insert_into_user_by_amount(self, row):
+        try:
+            vals = [
+                int(row.value['step']), row.value['type'], float(row.value['amount']),
+                row.value['nameOrig'], float(row.value['oldbalanceOrg']),
+                float(row.value['newbalanceOrig']), row.value['nameDest'],
+                float(row.value['oldbalanceDest']), float(row.value['newbalanceDest']),
+                int(row.value['isFraud']), row.value['transactionDate'],
+            ]
+            self._session.execute(INSERT_USER_BY_AMOUNT_STMT, vals)
+        except Exception as e:
+            raise e
+            return
+
+    def insert_into_user_transactions_by_date(self, row):
+        try:
+            vals = [
+                int(row.value['step']), row.value['type'], float(row.value['amount']),
+                row.value['nameOrig'], float(row.value['oldbalanceOrg']),
+                float(row.value['newbalanceOrig']), row.value['nameDest'],
+                float(row.value['oldbalanceDest']), float(row.value['newbalanceDest']),
+                int(row.value['isFraud']), row.value['transactionDate'],
+            ]
+            self._session.execute(INSERT_USER_TRANSACTION_BY_DATE_STMT, vals)
+        except Exception as e:
+            raise e
             return
 
 

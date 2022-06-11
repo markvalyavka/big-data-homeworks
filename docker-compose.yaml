@@ -53,6 +53,17 @@ services:
     networks:
       - "kafka-network"
 
+  app_rest_api:
+    build: ./app_rest_api
+    container_name: "app_rest_api"
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./app_rest_api/:/app/"
+    networks:
+      - "kafka-network"
+
+
 networks:
   kafka-network:
     external: true

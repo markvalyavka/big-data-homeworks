@@ -7,7 +7,6 @@ from kafka import KafkaConsumer
 from cassandra_client import cs
 
 
-
 TOPIC_NAME = "user_transactions"
 CASSANDRA_HOST = "cassandra_node1"
 CASSANDRA_PORT = 9042
@@ -32,6 +31,8 @@ def start_consuming():
         print("Received:")
         pprint(user_tx)
         cs.insert_into_user_by_is_fraud(user_tx)
+        cs.insert_into_user_by_amount(user_tx)
+        cs.insert_into_user_transactions_by_date(user_tx)
 
 
 

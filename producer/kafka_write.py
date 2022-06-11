@@ -26,7 +26,7 @@ def random_1mo_ago_date(delta=datetime.timedelta(days=31)):
     date_31d_ago = datetime.datetime.now() - delta
     int_delta = (delta.days * 24 * 60 * 60) + delta.seconds
     random_second = random.randrange(int_delta)
-    return (date_31d_ago + datetime.timedelta(seconds=random_second)).isoformat()
+    return (date_31d_ago + datetime.timedelta(seconds=random_second)).strftime("%Y-%m-%d")
 
 from pprint import pprint
 def produce_from_file(filename):

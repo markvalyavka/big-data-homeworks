@@ -14,4 +14,4 @@ COPY cassandra_client.py .
 
 EXPOSE 8080
 
-ENTRYPOINT ["python3", "runserver.py"]
+ENTRYPOINT ["python3", "app.py"]

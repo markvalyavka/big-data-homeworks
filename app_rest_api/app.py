@@ -22,7 +22,7 @@ def health():
 @app.route("/users_fraud", methods=["GET"])
 def get_fraud_user_tx():
 
-    request_params = request.json()
+    request_params = request.get_json()
     user_uid = request_params.get("uid")
     if not user_uid:
         return "BAD REQUEST", 400
