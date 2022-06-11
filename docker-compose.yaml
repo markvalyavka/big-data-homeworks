@@ -45,6 +45,14 @@ services:
     networks:
       - "kafka-network"
 
+  cassandra:
+    build: ./cassandra
+    container_name: "cassandra_node1"
+    ports:
+      - "9042:9042"
+    networks:
+      - "kafka-network"
+
 networks:
   kafka-network:
     external: true
